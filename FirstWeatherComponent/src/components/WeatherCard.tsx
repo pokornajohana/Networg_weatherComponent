@@ -1,7 +1,7 @@
 // import React from 'react';
 // import * as ReactDOM from 'react-dom';
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './index.css';
 import { IWeatherData } from './App';
 import {
@@ -14,42 +14,64 @@ import {
   ThunderstormsIcon,
   FogIcon,
 } from '@fluentui/react-icons-mdl2';
+import { type } from 'os';
+import { weeksToDays } from 'date-fns';
+// import { format } from 'path';
 
-export interface WeatherComponentProps {
-  weatherData: IWeatherData[];
-}
+// export interface WeatherComponentProps {
+//   weatherData: IWeatherData[];
+// }
+const daysOfWeek = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+];
 
-export const WeatherCard = () => {
-  const daysOfWeek = [
-    'Sunday',
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-  ];
+export const WeatherCard = ({
+  latitude,
+  longitude,
+}: {
+  latitude: number;
+  longitude: number;
+}) => {
+  const [data, setData] = useState(null);
   const [day, setDay] = useState('');
   const [weather, setWeather] = useState('');
   const [temperature, setTemperature] = useState(0);
 
-  const Fetch = fetch(
-    // 'https://api.openweathermap.org/data/2.5/weather?lat=33.44&lon=-94.04&appid=3811b08e86d8a57f3e32a31eb5fc27b6',
-    'https://api.openweathermap.org/data/2.5/forecast?lat=50.073658&lon=	14.418540&appid=3811b08e86d8a57f3e32a31eb5fc27b6&units=metric',
-  )
-    .then((resp) => resp.json())
-    .then((data) => {
-      console.log(data.list[0].main.temp);
-      setTemperature(data.list[0].main.temp);
-      console.log(data.list[0].dt_txt);
-      setDay(data.list[0].dt_txt);
-      setWeather(data.list[0].weather[0].main);
-      console.log(data.list[0].weather[0].main);
-    });
+  useEffect(() => {
+    fetch(
+      ` https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=3811b08e86d8a57f3e32a31eb5fc27b6&units=metric`,
+      // `https://api.openweathermap.org/data/3.0/onecall?lat=${latitude}&lon=${longitude}&appid=3811b08e86d8a57f3e32a31eb5fc27b6&units=metric`,
+    )
+      .then((resp) => resp.json())
+      .then((data) => {
+        setData(data.list);
+        console.log(data.list[0].main.temp);
+        setTemperature(data.list[0].main.temp);
+        console.log(data.list[0].dt_txt);
+        setDay(data.list[0].dt_txt);
+        // debugger;
+        setWeather(data.list[0].weather[0].main);
+        console.log(data.list[0].weather[0].main);
+      });
+  }, []);
+
+  if (!data) {
+    return <div>Loading...</div>;
+  }
+  let date = new Date(day);
+
   const weatherElements = (
     <div className="one_day">
-      <p className="name_day">{day}</p>
-      <p className="date_day">{day}</p>
+      <p className="name_day">
+        {date.toLocaleString('cs-CZ', { weekday: 'long' })}
+      </p>
+      <p className="date_day">{date.toLocaleDateString('cs-CZ')}</p>
 
       {weather === 'Rain' ? (
         <RainIcon className="weather_icon" />

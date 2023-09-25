@@ -1,4 +1,5 @@
 import React = require('react');
+import { useState, useEffect } from 'react';
 import { WeatherCard } from './WeatherCard';
 
 export interface IWeatherData {
@@ -23,11 +24,23 @@ export enum WeatherType {
   PARTLYCLOUDYDAY = 'PartlyCloudyDay',
 }
 export const App = () => {
+  const [latitude, setLatitude] = useState(0);
+  const [longitude, setLongitude] = useState(0);
+
+  useEffect(() => {
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        setLatitude(position.coords.latitude);
+        setLongitude(position.coords.longitude);
+      });
+    }
+  }, []);
+
   return (
     <>
       <h2>Weather Forecast App</h2>
       <div>
-        <WeatherCard />
+        <WeatherCard latitude={latitude} longitude={longitude} />
       </div>
     </>
   );
