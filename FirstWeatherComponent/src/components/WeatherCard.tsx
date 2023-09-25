@@ -15,7 +15,7 @@ import {
   FogIcon,
 } from '@fluentui/react-icons-mdl2';
 import { type } from 'os';
-import { weeksToDays } from 'date-fns';
+
 // import { format } from 'path';
 
 // export interface WeatherComponentProps {

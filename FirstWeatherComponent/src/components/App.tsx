@@ -26,7 +26,7 @@ export enum WeatherType {
 export const App = () => {
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
   const [day, setDay] = useState('');
   const [weather, setWeather] = useState('');
   const [temperature, setTemperature] = useState(0);
@@ -38,7 +38,7 @@ export const App = () => {
         setLongitude(position.coords.longitude);
       });
     }
-  }, [latitude, longitude]);
+  }, []);
 
   useEffect(() => {
     fetch(
@@ -48,25 +48,40 @@ export const App = () => {
       .then((resp) => resp.json())
       .then((data) => {
         setData(data.list);
-        console.log(data.list[0].main.temp);
-        setTemperature(data.list[0].main.temp);
-        console.log(data.list[0].dt_txt);
-        setDay(data.list[0].dt_txt);
-        setWeather(data.list[0].weather[0].main);
-        console.log(data.list[0].weather[0].main);
-        console.log(latitude);
+        // setTemperature(data.list[0].main.temp);
+        // setDay(data.list[0].dt_txt);
+        // setWeather(data.list[0].weather.main);
       });
   }, []);
 
-  if (!data) {
-    return <div>Loading...</div>;
-  }
+  // if (!data) {
+  //   return <div>Loading...</div>;
+  // }
 
   return (
     <>
       <h2>Weather Forecast App</h2>
       <div>
-        <WeatherCard day={day} temperature={temperature} weather={weather} />
+        {data.map(
+          (item: {
+            main: { temp: number };
+            dt_txt: string;
+            weather: [{ main: string }];
+          }) => {
+            console.log(item);
+            // setDay(item.dt_txt);
+            // setTemperature(item.main.temp);
+            // setWeather(item.weather.main);
+            console.log(item.weather[0].main);
+            return (
+              <WeatherCard
+                day={item.dt_txt}
+                temperature={item.main.temp}
+                weather={item.weather[0].main}
+              />
+            );
+          },
+        )}
       </div>
     </>
   );
