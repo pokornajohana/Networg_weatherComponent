@@ -32,46 +32,23 @@ const daysOfWeek = [
 ];
 
 export const WeatherCard = ({
-  latitude,
-  longitude,
+  day,
+  temperature,
+  weather,
 }: {
-  latitude: number;
-  longitude: number;
+  day: string;
+  temperature: number;
+  weather: string;
 }) => {
-  const [data, setData] = useState(null);
-  const [day, setDay] = useState('');
-  const [weather, setWeather] = useState('');
-  const [temperature, setTemperature] = useState(0);
-
-  useEffect(() => {
-    fetch(
-      ` https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=3811b08e86d8a57f3e32a31eb5fc27b6&units=metric`,
-      // `https://api.openweathermap.org/data/3.0/onecall?lat=${latitude}&lon=${longitude}&appid=3811b08e86d8a57f3e32a31eb5fc27b6&units=metric`,
-    )
-      .then((resp) => resp.json())
-      .then((data) => {
-        setData(data.list);
-        console.log(data.list[0].main.temp);
-        setTemperature(data.list[0].main.temp);
-        console.log(data.list[0].dt_txt);
-        setDay(data.list[0].dt_txt);
-        // debugger;
-        setWeather(data.list[0].weather[0].main);
-        console.log(data.list[0].weather[0].main);
-      });
-  }, []);
-
-  if (!data) {
-    return <div>Loading...</div>;
-  }
   let date = new Date(day);
+  let formattedDate = date
+    .toLocaleString('cs-CZ', { weekday: 'long' })
+    .toUpperCase();
 
   const weatherElements = (
     <div className="one_day">
-      <p className="name_day">
-        {date.toLocaleString('cs-CZ', { weekday: 'long' })}
-      </p>
-      <p className="date_day">{date.toLocaleDateString('cs-CZ')}</p>
+      <p className="name_day">{formattedDate}</p>
+      <p className="date_day">{date.toLocaleDateString('en-GB')}</p>
 
       {weather === 'Rain' ? (
         <RainIcon className="weather_icon" />
