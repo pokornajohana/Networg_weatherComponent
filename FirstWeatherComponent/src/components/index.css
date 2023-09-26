@@ -9,12 +9,9 @@ h2 {
 .block {
   display: flex;
   flex-wrap: wrap;
-  width: 400px;
   justify-content: center;
   align-items: center;
 
-  /* border: 1px solid black; */
-  /* margin: 3px; */
 }
 
 .one_day {

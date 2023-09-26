@@ -5,25 +5,6 @@ import { App } from './src/components/App';
 import { IWeatherData } from './src/components/App';
 import { WeatherType } from './src/components/App';
 
-// export interface IWeatherData {
-//   date: Date;
-//   temperature: number;
-//   weatherType: WeatherType;
-// }
-// export enum WeatherType {
-//   CLOUDY = 'Cloudy',
-//   SUNNY = 'Sunny',
-//   SNOW = 'Snow',
-//   RAINSNOW = 'RainSnow',
-//   PARTLYCLOUDYDAY = 'PartlyCloudyDay',
-// }
-// export interface AppProps {
-//   weatherData: IWeatherData[];
-// }
-// export interface WeatherComponentProps {
-//   weatherData: IWeatherData[];
-// }
-
 export class WeatherComponent
   implements ComponentFramework.StandardControl<IInputs, IOutputs>
 {
@@ -48,30 +29,6 @@ export class WeatherComponent
    * @param state A piece of data that persists in one session for a single user. Can be set at any point in a controls life cycle by calling 'setControlState' in the Mode interface.
    * @param container If a control is marked control-type='standard', it will receive an empty div element within which it can render its content.
    */
-  private generateWeatherData(): IWeatherData[] {
-    let startDate = new Date();
-    let weatherData: IWeatherData[] = [];
-    for (let i = 0; i < 5; i++) {
-      let date = new Date();
-      date.setDate(startDate.getDate() + i);
-      let temperature = Math.floor(Math.random() * 51) - 25;
-      let weatherType: WeatherType = WeatherType.SUNNY;
-      if (temperature <= -5) weatherType = WeatherType.SNOW;
-      else if (temperature >= -5 && temperature <= 5)
-        weatherType = WeatherType.RAINSNOW;
-      else if (temperature >= 5 && temperature <= 10)
-        weatherType = WeatherType.CLOUDY;
-      else if (temperature >= 10 && temperature <= 20)
-        weatherType = WeatherType.PARTLYCLOUDYDAY;
-      else if (temperature >= 20) weatherType = WeatherType.SUNNY;
-      weatherData.push({
-        date: date,
-        temperature: temperature,
-        weatherType: weatherType,
-      });
-    }
-    return weatherData;
-  }
 
   public init(
     context: ComponentFramework.Context<IInputs>,
@@ -90,19 +47,11 @@ export class WeatherComponent
     this._container = document.createElement('div');
     this._container.innerText = this._value;
 
-    const weatherData = this.generateWeatherData();
-    console.log('Generated Weather DAta:', weatherData);
-    this._weatherData = this.generateWeatherData();
-
     container.appendChild(this._container);
 
     this.getImage();
 
-    ReactDOM.render(
-      React.createElement(App, { weatherData: this._weatherData }),
-      this._container,
-    );
-    // ReactDOM.render(React.createElement(App), this._container);
+    ReactDOM.render(React.createElement(App), this._container);
   }
 
   getImage() {

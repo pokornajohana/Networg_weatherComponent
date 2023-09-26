@@ -43,7 +43,6 @@ export const App = () => {
   useEffect(() => {
     fetch(
       ` https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=3811b08e86d8a57f3e32a31eb5fc27b6&units=metric`,
-      // `https://api.openweathermap.org/data/3.0/onecall?lat=${latitude}&lon=${longitude}&appid=3811b08e86d8a57f3e32a31eb5fc27b6&units=metric`,
     )
       .then((resp) => resp.json())
       .then((data) => {
@@ -63,42 +62,40 @@ export const App = () => {
     <>
       <h2>Weather Forecast App</h2>
       <section className="block">
-        {data.map(
-          (item: {
-            main: { temp: number };
-            dt_txt: string;
-            weather: [{ main: string }];
-            dt: number;
-          }) => {
-            // setDay(item.dt_txt);
-            // setTemperature(item.main.temp);
-            // setWeather(item.weather.main);
-            {
-              return (
-                <WeatherCard
-                  index={item.dt}
-                  day={item.dt_txt}
-                  temperature={item.main.temp}
-                  weather={item.weather[0].main}
-                />
-              );
-            }
-          },
-        )}
+        {data
+          .filter(
+            (item: { dt_txt: string }, index, self) =>
+              self.findIndex(
+                (t: { dt_txt: string }) =>
+                  new Date(t.dt_txt).toLocaleDateString() ===
+                  new Date(item.dt_txt).toLocaleDateString(),
+              ) === index,
+          )
+          .map(
+            (item: {
+              main: { temp: number };
+              dt_txt: string;
+              weather: [{ main: string }];
+              dt: number;
+            }) => {
+              console.log('DATA', data);
+              console.log('ITEM', item);
+              // setDay(item.dt_txt);
+              // setTemperature(item.main.temp);
+              // setWeather(item.weather.main);
+              {
+                return (
+                  <WeatherCard
+                    index={item.dt}
+                    day={item.dt_txt}
+                    temperature={item.main.temp}
+                    weather={item.weather[0].main}
+                  />
+                );
+              }
+            },
+          )}
       </section>
     </>
   );
 };
-
-// export const App: React.FC<AppProps> = ({ weatherData }) => {
-//   console.log(weatherData);
-
-//   return (
-//     <>
-//       <h2>Weather Forecast App</h2>
-//       <div>
-//         <WeatherCard weatherData={weatherData} />
-//       </div>
-//     </>
-//   );
-// };
