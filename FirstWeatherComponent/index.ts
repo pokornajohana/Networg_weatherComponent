@@ -49,21 +49,7 @@ export class WeatherComponent
 
     container.appendChild(this._container);
 
-    this.getImage();
-
     ReactDOM.render(React.createElement(App), this._container);
-  }
-
-  getImage() {
-    this._context.resources.getResource(
-      'src/components/img/sun.png',
-      (data) => {
-        console.log(data);
-      },
-      () => {
-        console.log('ll');
-      },
-    );
   }
 
   /**

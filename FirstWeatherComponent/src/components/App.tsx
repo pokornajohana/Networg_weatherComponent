@@ -27,9 +27,6 @@ export const App = () => {
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
   const [data, setData] = useState([]);
-  const [day, setDay] = useState('');
-  const [weather, setWeather] = useState('');
-  const [temperature, setTemperature] = useState(0);
 
   useEffect(() => {
     if ('geolocation' in navigator) {
@@ -47,12 +44,8 @@ export const App = () => {
       .then((resp) => resp.json())
       .then((data) => {
         setData(data.list);
-        console.log(data);
-        // setTemperature(data.list[0].main.temp);
-        // setDay(data.list[0].dt_txt);
-        // setWeather(data.list[0].weather.main);
       });
-  }, []);
+  }, [latitude, longitude]);
 
   // if (!data) {
   //   return <div>Loading...</div>;
@@ -78,21 +71,14 @@ export const App = () => {
               weather: [{ main: string }];
               dt: number;
             }) => {
-              console.log('DATA', data);
-              console.log('ITEM', item);
-              // setDay(item.dt_txt);
-              // setTemperature(item.main.temp);
-              // setWeather(item.weather.main);
-              {
-                return (
-                  <WeatherCard
-                    index={item.dt}
-                    day={item.dt_txt}
-                    temperature={item.main.temp}
-                    weather={item.weather[0].main}
-                  />
-                );
-              }
+              return (
+                <WeatherCard
+                  key={item.dt}
+                  day={item.dt_txt}
+                  temperature={item.main.temp}
+                  weather={item.weather[0].main}
+                />
+              );
             },
           )}
       </section>

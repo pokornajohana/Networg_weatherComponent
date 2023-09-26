@@ -10,7 +10,6 @@ import {
   ThunderstormsIcon,
   FogIcon,
 } from '@fluentui/react-icons-mdl2';
-import { type } from 'os';
 
 const daysOfWeek = [
   'Sunday',
@@ -23,12 +22,10 @@ const daysOfWeek = [
 ];
 
 export const WeatherCard = ({
-  index,
   day,
   temperature,
   weather,
 }: {
-  index: number;
   day: string;
   temperature: number;
   weather: string;
@@ -39,7 +36,7 @@ export const WeatherCard = ({
     .toUpperCase();
 
   const weatherElements = (
-    <div className="one_day" key={index}>
+    <div className="one_day">
       <p className="name_day">{formattedDate}</p>
       <p className="date_day">{date.toLocaleDateString('en-GB')}</p>
 
