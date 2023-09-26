@@ -8,10 +8,11 @@ h2 {
 
 .block {
   display: flex;
-  flex-direction: row;
+  flex-wrap: wrap;
+  width: 400px;
   justify-content: center;
   align-items: center;
-  /* width: 100%; */
+
   /* border: 1px solid black; */
   /* margin: 3px; */
 }

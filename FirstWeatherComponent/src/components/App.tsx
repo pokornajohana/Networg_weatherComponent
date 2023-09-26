@@ -48,6 +48,7 @@ export const App = () => {
       .then((resp) => resp.json())
       .then((data) => {
         setData(data.list);
+        console.log(data);
         // setTemperature(data.list[0].main.temp);
         // setDay(data.list[0].dt_txt);
         // setWeather(data.list[0].weather.main);
@@ -61,28 +62,30 @@ export const App = () => {
   return (
     <>
       <h2>Weather Forecast App</h2>
-      <div>
+      <section className="block">
         {data.map(
           (item: {
             main: { temp: number };
             dt_txt: string;
             weather: [{ main: string }];
+            dt: number;
           }) => {
-            console.log(item);
             // setDay(item.dt_txt);
             // setTemperature(item.main.temp);
             // setWeather(item.weather.main);
-            console.log(item.weather[0].main);
-            return (
-              <WeatherCard
-                day={item.dt_txt}
-                temperature={item.main.temp}
-                weather={item.weather[0].main}
-              />
-            );
+            {
+              return (
+                <WeatherCard
+                  index={item.dt}
+                  day={item.dt_txt}
+                  temperature={item.main.temp}
+                  weather={item.weather[0].main}
+                />
+              );
+            }
           },
         )}
-      </div>
+      </section>
     </>
   );
 };

@@ -32,10 +32,12 @@ const daysOfWeek = [
 ];
 
 export const WeatherCard = ({
+  index,
   day,
   temperature,
   weather,
 }: {
+  index: number;
   day: string;
   temperature: number;
   weather: string;
@@ -46,9 +48,15 @@ export const WeatherCard = ({
     .toUpperCase();
 
   const weatherElements = (
-    <div className="one_day">
+    <div className="one_day" key={index}>
       <p className="name_day">{formattedDate}</p>
       <p className="date_day">{date.toLocaleDateString('en-GB')}</p>
+      <p className="hour_day">
+        {date.toLocaleTimeString('cs-CZ', {
+          hour: '2-digit',
+          minute: '2-digit',
+        })}
+      </p>
 
       {weather === 'Rain' ? (
         <RainIcon className="weather_icon" />
@@ -69,7 +77,7 @@ export const WeatherCard = ({
       <p className="weather_day">{weather}</p>
     </div>
   );
-  return <section className="block">{weatherElements}</section>;
+  return <>{weatherElements}</>;
 };
 
 // export const WeatherCard: React.FC<WeatherComponentProps> = ({
